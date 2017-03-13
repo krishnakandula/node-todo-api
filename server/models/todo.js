@@ -17,8 +17,8 @@ let todoSchema = new mongoose.Schema({
     }
 });
 
-let todo = mongoose.model('Todo', todoSchema);
+let Todo = mongoose.model('Todo', todoSchema);
 
 module.exports = {
-    todo
+    Todo
 };

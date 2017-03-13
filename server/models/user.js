@@ -9,8 +9,8 @@ let userSchema = new mongoose.Schema({
     }
 });
 
-let user = mongoose.model('User', userSchema);
+let User = mongoose.model('User', userSchema);
 
 module.exports = {
-    user
+    User
 };
