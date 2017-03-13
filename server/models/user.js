@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 let userSchema = new mongoose.Schema({
     email : {
         type: String,
-        requried: true,
+        required: true,
         minlength: 1,
         trim: true
     }

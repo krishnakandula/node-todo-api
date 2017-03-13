@@ -7,9 +7,12 @@ let {User} = require('./models/user');
 
 let app = express();
 
+//middleware
+app.use(bodyParser.json());
+
 //Creating a new todo
 app.post('/todos', (req, res) => {
-    
+    console.log(req.body);
 });
 
 app.listen(3000, () => {

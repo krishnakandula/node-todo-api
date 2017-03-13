@@ -4,20 +4,20 @@ let todoSchema = new mongoose.Schema({
     text: {
         type: String,
         required: true,
-        minLength: 1,
+        minlength: 1,
         trim: true
     }, 
     completed: {
-        type: boolean,
+        type: Boolean,
         default: false
     },
     completedAt: {
-        type: number,
+        type: Number,
         default: null
     }
 });
 
-let todo = new mongoose.model('Todo', todoSchema);
+let todo = mongoose.model('Todo', todoSchema);
 
 module.exports = {
     todo
