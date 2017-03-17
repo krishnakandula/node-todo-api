@@ -1,9 +1,9 @@
 const expect = require('expect');
 const request = require('supertest');
-const {ObjectID} = require('mongodb');
+const { ObjectID } = require('mongodb');
 
-const {app} = require('./../server');
-const {Todo} = require('./../models/todo');
+const { app } = require('./../server');
+const { Todo } = require('./../models/todo');
 
 const todos = [{
     _id: new ObjectID(),
@@ -17,7 +17,7 @@ const todos = [{
 //Empties db before every request
 beforeEach((done) => {
     Todo.remove({}).then(() => {
-        return Todo.insertMany(todos);
+        Todo.insertMany(todos);
     }).then(() => done());
 });
 
@@ -35,11 +35,11 @@ describe('POST /todos', () => {
                 expect(res.body.text).toBe(text);
             })
             .end((err, res) => {
-                if(err){
+                if (err) {
                     return done(err);
                 }
                 //Check it was saved to db
-                Todo.find({text}).then((todos) => {
+                Todo.find({ text }).then((todos) => {
                     expect(todos.length).toBe(1);
                     expect(todos[0].text).toBe(text);
                     done();
@@ -53,7 +53,7 @@ describe('POST /todos', () => {
             .send({})
             .expect(400)
             .end((err, res) => {
-                if(err){
+                if (err) {
                     return done(err);
                 }
 
@@ -104,5 +104,18 @@ describe('GET /todos/:id', () => {
             .get('/todos/123')  //some bogus id that's invalid
             .expect(404)
             .end(done);
+    });
+});
+
+describe('DELETE /todos/:id', () => {
+    it('should return deleted todo', (done) => {
+        let id = todos[0]._id.toHexString();
+        request(app)
+            .delete(`/todos/${id}`)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo._id).toBe(id);
+            })
+            .end(done)
     });
 });

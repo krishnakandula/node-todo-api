@@ -45,7 +45,7 @@ app.get('/todos/:id', (req, res) => {
 
     //404 - send back empty body
     if(!ObjectID.isValid(id)){
-        res.status(404).send(`Invalid id: ${id}`);
+        return res.status(404).send(`Invalid id: ${id}`);
     }
     
     //findbyid
@@ -55,6 +55,25 @@ app.get('/todos/:id', (req, res) => {
         }
 
         res.status(200).send({todo});
+    }, (error) => {
+        res.status(400).send();
+    });
+});
+
+app.delete('/todos/:id', (req, res) => {
+    //Get id
+    let id = req.params.id;
+    //Validate id -> not valid? return 404
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send();
+    }
+    //Remove todo by id
+    Todo.findByIdAndRemove(id).then((todo) => {
+        if(!todo){
+            return res.status(404).send();
+        }
+
+        res.status(200).send(todo);
     }, (error) => {
         res.status(400).send();
     });
