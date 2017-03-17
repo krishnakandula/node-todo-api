@@ -26,9 +26,9 @@ app.post('/todos', (req, res) => {
 
 //Returns all todos
 app.get('/todos', (req, res) => {
-    Todo.find().then((docs) => {
+    Todo.find().then((todos) => {
         res.send({
-            todos: docs
+            todos
         });
     }, (error) => {
         res.status(400).send(error);
@@ -72,8 +72,8 @@ app.delete('/todos/:id', (req, res) => {
         if(!todo){
             return res.status(404).send();
         }
-
-        res.status(200).send(todo);
+        
+        res.status(200).send({todo});
     }, (error) => {
         res.status(400).send();
     });
