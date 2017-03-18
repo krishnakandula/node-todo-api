@@ -1,4 +1,5 @@
 const express = require('express');
+const _ = require('lodash');
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 
@@ -67,6 +68,7 @@ app.delete('/todos/:id', (req, res) => {
     if(!ObjectID.isValid(id)){
         return res.status(404).send();
     }
+
     //Remove todo by id
     Todo.findByIdAndRemove(id).then((todo) => {
         if(!todo){
@@ -75,6 +77,37 @@ app.delete('/todos/:id', (req, res) => {
         
         res.status(200).send({todo});
     }, (error) => {
+        res.status(400).send();
+    });
+});
+
+app.patch('/todos/:id', (req, res) => {
+    console.log('patch');
+    let id = req.params.id;
+    //lodash method that picks properties from req.body obj
+    let body = _.pick(req.body, ['text', 'completed']);
+
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send(`Invalid id: ${id}`);
+    }
+
+    if(_.isBoolean(body.completed) && body.completed){
+        body.completedAt = new Date().getTime();
+    } else {
+        body.completed = false;
+        body.completedAt = null;
+    }
+
+    Todo.findByIdAndUpdate(id, {
+        $set: body
+    }, {
+        new: true
+    }).then((todo) => {
+        if(!todo){
+            res.status(404).send();
+        }
+        res.send({todo});
+    }, (err) => {
         res.status(400).send();
     });
 });
