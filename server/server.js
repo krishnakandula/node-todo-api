@@ -1,3 +1,5 @@
+require('./config/config');
+
 const express = require('express');
 const _ = require('lodash');
 const bodyParser = require('body-parser');
@@ -8,7 +10,7 @@ let {Todo} = require('./models/todo');
 let {User} = require('./models/user');
 
 let app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 //middleware
 app.use(bodyParser.json());
@@ -82,7 +84,6 @@ app.delete('/todos/:id', (req, res) => {
 });
 
 app.patch('/todos/:id', (req, res) => {
-    console.log('patch');
     let id = req.params.id;
     //lodash method that picks properties from req.body obj
     let body = _.pick(req.body, ['text', 'completed']);
